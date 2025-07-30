@@ -305,7 +305,6 @@ function App() {
                   color="secondary"
                 />
               </div>
-              </div>
             </div>
           </div>
         )}
