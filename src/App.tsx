@@ -10,6 +10,7 @@ import { useKV } from '@github/spark/hooks'
 interface TimeCalculations {
   lived: {
     years: number
+    quarters: number
     months: number
     weeks: number
     days: number
@@ -39,6 +40,7 @@ function calculateTime(birthday: string, deathDay: string): TimeCalculations | n
   const livedMs = today.getTime() - birth.getTime()
   const livedDays = Math.floor(livedMs / (1000 * 60 * 60 * 24))
   const livedYears = Math.floor(livedDays / 365.25)
+  const livedQuarters = Math.floor(livedDays / (365.25 / 4))
   const livedMonths = Math.floor(livedDays / 30.44)
   const livedWeeks = Math.floor(livedDays / 7)
 
@@ -57,6 +59,7 @@ function calculateTime(birthday: string, deathDay: string): TimeCalculations | n
   return {
     lived: {
       years: livedYears,
+      quarters: livedQuarters,
       months: livedMonths,
       weeks: livedWeeks,
       days: livedDays,
@@ -231,11 +234,17 @@ function App() {
               <h2 className="text-2xl font-semibold mb-6 text-foreground">
                 Time You've Lived
               </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                 <MetricCard
                   title="Years"
                   value={calculations.lived.years}
                   description="Years on this Earth"
+                  color="primary"
+                />
+                <MetricCard
+                  title="Quarters"
+                  value={calculations.lived.quarters}
+                  description="Quarters experienced"
                   color="primary"
                 />
                 <MetricCard
@@ -264,7 +273,7 @@ function App() {
               <h2 className="text-2xl font-semibold mb-6 text-foreground">
                 Time Remaining
               </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                 <MetricCard
                   title="Years"
                   value={calculations.remaining.years}
@@ -289,6 +298,13 @@ function App() {
                   description="Weeks to make count"
                   color="secondary"
                 />
+                <MetricCard
+                  title="Days"
+                  value={calculations.remaining.days}
+                  description="Days left to live"
+                  color="secondary"
+                />
+              </div>
               </div>
             </div>
           </div>
