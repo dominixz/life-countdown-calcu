@@ -8,16 +8,16 @@ Calculate the time you've lived and visualize your remaining time across differe
 3. **Visual** - Clear presentation of time data that's easy to understand
 
 **Complexity Level**: Micro Tool (single-purpose)
-- Focused solely on time calculations between birth and projected death dates
+- Focused solely on time calculations between birth date and target lifespan
 
 ## Essential Features
 
 **Date Input Form**
-- Functionality: Accept birthday and projected death date inputs
-- Purpose: Gather the two critical dates needed for all calculations
+- Functionality: Accept birthday and target lifespan (numeric age) inputs
+- Purpose: Gather birth date and desired lifespan for all calculations
 - Trigger: User lands on the page
-- Progression: Enter birthday → Enter death date → See calculations automatically
-- Success criteria: Dates are validated and calculations update in real-time
+- Progression: Enter birthday → Enter target age → See calculations automatically
+- Success criteria: Date and age are validated and calculations update in real-time
 
 **Time Lived Display**
 - Functionality: Shows total time lived in years, months, weeks, and days
@@ -30,22 +30,22 @@ Calculate the time you've lived and visualize your remaining time across differe
 - Functionality: Shows remaining time in years, quarters, months, and weeks
 - Purpose: Visualizes future time in meaningful chunks
 - Trigger: Valid dates are entered
-- Progression: Calculate remaining time → Break into periods → Display with progress indicators
-- Success criteria: Clear presentation of remaining time with visual progress bars
+- Functionality: Calculate remaining time → Break into periods → Display with progress indicators
+- Success criteria: Clear presentation of remaining time based on target lifespan
 
 **Life Progress Visualization**
 - Functionality: Visual progress bar showing percentage of life completed
 - Purpose: Provides immediate visual context of life stage
 - Trigger: Valid dates are entered
-- Progression: Calculate percentage → Display progress bar → Show exact percentage
+- Progression: Calculate percentage based on target lifespan → Display progress bar → Show exact percentage
 - Success criteria: Intuitive progress bar with percentage display
 
 ## Edge Case Handling
 
 - **Future Birthday**: Show message if birthday is in the future
-- **Past Death Date**: Validate that death date is after birthday and today
+- **Invalid Target Age**: Validate that target age is reasonable (1-150 years)
 - **Invalid Dates**: Clear error messages for malformed date inputs
-- **Same Dates**: Handle edge case where dates are identical
+- **Target Age Too Low**: Handle cases where current age exceeds target lifespan
 - **Leap Years**: Accurate calculations accounting for leap years
 
 ## Design Direction
@@ -86,7 +86,7 @@ Subtle, purposeful animations that enhance the contemplative experience without 
 
 - **Components**: 
   - Card components for organizing different time periods
-  - Input components with date pickers for birthday/death date
+  - Input components with date picker for birthday and number input for target age
   - Progress components for life completion visualization
   - Badge components for time period labels
 - **Customizations**: 

@@ -27,12 +27,18 @@ interface TimeCalculations {
   lifeProgress: number
 }
 
-function calculateTime(birthday: string, deathDay: string): TimeCalculations | null {
+function calculateTime(birthday: string, targetAge: number): TimeCalculations | null {
   const birth = new Date(birthday)
-  const death = new Date(deathDay)
   const today = new Date()
   
-  if (birth > today || death <= birth || death <= today) {
+  if (birth > today || !targetAge || targetAge <= 0) {
+    return null
+  }
+
+  // Calculate death date based on target age
+  const death = new Date(birth.getFullYear() + targetAge, birth.getMonth(), birth.getDate())
+  
+  if (death <= today) {
     return null
   }
 
@@ -117,16 +123,16 @@ function MetricCard({ title, value, suffix, description, color = "primary" }: {
 
 function App() {
   const [birthday, setBirthday] = useKV("birthday", "")
-  const [deathDay, setDeathDay] = useKV("deathDay", "")
+  const [targetAge, setTargetAge] = useKV("targetAge", 80)
 
-  const calculations = birthday && deathDay ? calculateTime(birthday, deathDay) : null
+  const calculations = birthday && targetAge ? calculateTime(birthday, targetAge) : null
 
   const formatDate = (dateString: string) => {
     if (!dateString) return ""
     return new Date(dateString).toLocaleDateString()
   }
 
-  const isValidInput = birthday && deathDay && calculations !== null
+  const isValidInput = birthday && targetAge && calculations !== null
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background">
@@ -137,7 +143,7 @@ function App() {
             Life Calculator
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Discover how much time you've lived and visualize your remaining journey through life's chapters.
+            Discover how much time you've lived and visualize your remaining journey based on your target lifespan.
           </p>
         </div>
 
@@ -169,19 +175,22 @@ function App() {
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="deathday" className="text-sm font-medium">
-                  Projected End Date
+                <Label htmlFor="targetage" className="text-sm font-medium">
+                  Target Lifespan (years)
                 </Label>
                 <Input
-                  id="deathday"
-                  type="date"
-                  value={deathDay}
-                  onChange={(e) => setDeathDay(e.target.value)}
+                  id="targetage"
+                  type="number"
+                  min="1"
+                  max="150"
+                  value={targetAge}
+                  onChange={(e) => setTargetAge(Number(e.target.value))}
                   className="w-full"
+                  placeholder="e.g. 80"
                 />
-                {deathDay && (
+                {targetAge && (
                   <p className="text-xs text-muted-foreground">
-                    {formatDate(deathDay)}
+                    Target age: {targetAge} years
                   </p>
                 )}
               </div>
@@ -190,11 +199,11 @@ function App() {
         </Card>
 
         {/* Error Messages */}
-        {birthday && deathDay && !calculations && (
+        {birthday && targetAge && !calculations && (
           <Card className="mb-8 border-destructive/20 bg-destructive/5">
             <CardContent className="p-6">
               <p className="text-destructive text-center">
-                Please ensure your birthday is in the past and your projected end date is in the future and after your birthday.
+                Please ensure your birthday is in the past and your target lifespan is a valid number.
               </p>
             </CardContent>
           </Card>
@@ -218,7 +227,7 @@ function App() {
                       {calculations.lifeProgress.toFixed(1)}%
                     </span>
                     <p className="text-sm text-muted-foreground mt-1">
-                      of your projected life completed
+                      of your target lifespan completed
                     </p>
                   </div>
                   <Progress 
@@ -312,7 +321,7 @@ function App() {
         {/* Footer */}
         <div className="mt-16 text-center">
           <p className="text-muted-foreground text-sm">
-            Remember: These calculations are estimates based on your projections. 
+            Remember: These calculations are estimates based on your target lifespan. 
             Make every moment count.
           </p>
         </div>
